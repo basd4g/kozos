@@ -1,1 +1,6 @@
 h8write
+*.o
+kzload
+kzload.elf
+kzload.mot
+
