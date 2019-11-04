@@ -4,7 +4,7 @@ ENTRY("_start")
 
 SECTIONS
 {
-	/* メモリの先頭番地から配置 */
+	/* メモリの先頭番地から配置(ロケーションカウンタ"."を0に初期化) */
 	. = 0x0;
 
 	/* 割り込みベクタ */
@@ -17,6 +17,7 @@ SECTIONS
 		*(.text)
 	}
 
+	/* rodata ... Read Only DATA */
 	.rodata : {
 		*(.strings)
 		*(.rodata)
