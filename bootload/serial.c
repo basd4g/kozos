@@ -11,36 +11,36 @@
 
 // SCIの各種レジスタの定義
 struct h8_3069f_sci {
-	volatile uint8 smr;
-	volatile uint8 brr;
-	volatile uint8 scr;
-	volatile uint8 tdr;
-	volatile uint8 ssr;
-	volatile uint8 rdr;
+	volatile uint8 smr; // SCI1 ... シリアル通信のモード設定
+	volatile uint8 brr; // SCI1 ... ボーレートの設定 ビットレートレジスタ
+	volatile uint8 scr; // SCI1 ... 送受信の有効/無効等
+	volatile uint8 tdr; // SCI1 ... 送信したい1文字を書き込む トランスミットデータレジスタ
+	volatile uint8 ssr; // SCI1 ... 送信完了/受信完了などを表す シリアルステータスレジスタ
+	volatile uint8 rdr; // SCI1 ... 受信した1文字を読み出す
 	volatile uint8 scmr;
 };
 
-// SMRの各ビットの定義
-#define H8_3069F_SCI_SMR_CKS_PER1	(0<<0)
-#define H8_3069F_SCI_SMR_CKS_PER4	(1<<0)
-#define H8_3069F_SCI_SMR_CKS_PER16	(2<<0)
-#define H8_3069F_SCI_SMR_CKS_PER64	(3<<0)
+// SMRの各ビットの定義 シリアル通信のモード設定
+#define H8_3069F_SCI_SMR_CKS_PER1	(0<<0) // クロックセレクト(分周比)(クロックをそのまま利用する)
+#define H8_3069F_SCI_SMR_CKS_PER4	(1<<0) // クロックセレクト
+#define H8_3069F_SCI_SMR_CKS_PER16	(2<<0) // クロックセレクト
+#define H8_3069F_SCI_SMR_CKS_PER64	(3<<0) // クロックセレクト
 #define H8_3069F_SCI_SMR_MP		(1<<2)
-#define H8_3069F_SCI_SMR_STOP		(1<<3)
-#define H8_3069F_SCI_SMR_OE		(1<<4)
-#define H8_3069F_SCI_SMR_PE		(1<<5)
-#define H8_3069F_SCI_SMR_CHR		(1<<6)
-#define H8_3069F_SCI_SMR_CA		(1<<7)
+#define H8_3069F_SCI_SMR_STOP		(1<<3) // ストップビット長..2bit (非設定..1bit)
+#define H8_3069F_SCI_SMR_OE		(1<<4) // 奇数パリティ (非設定..偶数パリティ)
+#define H8_3069F_SCI_SMR_PE		(1<<5) // パリティの有効化 (非設定..パリティ無効)
+#define H8_3069F_SCI_SMR_CHR		(1<<6) // データ長..7bit (非設定..8bit)
+#define H8_3069F_SCI_SMR_CA		(1<<7) // 同期モード..クロック同期 (非設定..調歩同期)
 
-// SCPの各ビットの定義
-#define H8_3069F_SCI_SCR_CKE0		(1<<0)
-#define H8_3069F_SCI_SCR_CKE1		(1<<1)
-#define H8_3069F_SCI_SCR_TEIE		(1<<2)
+// SCR(Serial Control Register)の各ビットの定義 シリアル入出力の制御
+#define H8_3069F_SCI_SCR_CKE0		(1<<0) // クロックイネーブル ひとまず0
+#define H8_3069F_SCI_SCR_CKE1		(1<<1) // クロックイネーブル ひとまず0
+#define H8_3069F_SCI_SCR_TEIE		(1<<2) 
 #define H8_3069F_SCI_SCR_MPIE		(1<<3)
 #define H8_3069F_SCI_SCR_RE		(1<<4) // 受信有効
 #define H8_3069F_SCI_SCR_TE		(1<<5) // 送信有効
 #define H8_3069F_SCI_SCR_RTE		(1<<6) // 受信割り込み有効
-#define H8_3069F_SCI_SCR_TIE		(1<<7) // 送信割り込み成功
+#define H8_3069F_SCI_SCR_TIE		(1<<7) // 送信割り込み有効
 
 // SSRの各ビットの定義
 #define H8_3069F_SCI_SSR_MPBT		(1<<0)
