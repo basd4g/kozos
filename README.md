@@ -74,14 +74,13 @@ linuxにUSBシリアル変換ケーブルを介して接続するシリアルポ
 ```sh
 $ cd bootload
 $ make
-$ make image
-# モトローラSレコードフォーマットに変換 kozload.motが生成
 ```
 
 ### 書き込み
 
 ```
-$ sudo make write
+$ sudo make image
+# モトローラSレコードフォーマットに変換 kozload.motが生成
 # ../h8write -3069 -f20 kzload.mot /dev/ttyUSB0 を実行
 ```
 
