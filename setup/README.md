@@ -99,13 +99,29 @@ $ rm -rf gcc-3.4.6
 H8 3069FのフラッシュROMへの書き込みツール
 
 ```sh
-
 $ curl -O http://mes.osdn.jp/h8/h8write.c
 $ gcc h8write.c -o h8write -Wall
 
 # ソースファイルの削除
 $ rm h8write.c
+```
 
+### kz_xmodem (XMODEM for KOZOS H8/3069F)
+
+H8 3069FへOSをXMODEMプロトコルで転送するプログラム
+
+shellに含まれていない
+
+```sh
+$ mkdir kz_xmodem
+$ curl -O https://www.cubeatsystems.com/software/kz_xmodem/kz_xmodem-v0.0.2.tar.gz -k
+$ tar -xvf kz_xmodem-v0.0.2.tar.gz
+$ cd src
+$ make
+$ cd ../../
+$ cp kz_xmodem_src/kz_xmodem ./
+$ rm -r kz_xmodem
+# sudo ./kz_xmodem bootload/define.h /dev/ttyUSB0 のように使う
 ```
 
 ## macで構築するときのTips
@@ -120,6 +136,7 @@ basd4g/kozosをcloneする前に、以下を実行する。
 sudo apt update
 sudo apt install gcc
 sudo apt install cu
+sudo apt install lrzsz
 ```
 
 ### [Virtual Box (vagrantを含む)でUSB機器を認識させる方法](https://blog.yammer.fun/article/virtualBoxUSB/)

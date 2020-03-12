@@ -117,3 +117,26 @@ int putxval(unsigned long value, int column)
 
 	return 0;
 }
+
+// 1文字受信
+unsigned char getc(void)
+{
+	unsigned char c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
+	c = (c =='\r') ? '\n' : c; // 改行コードの変換
+	putc(c); // エコーバック
+	return c;
+}
+
+// 文字列受信
+int gets(unsigned char *buf)
+{
+	int i = 0;
+	unsigned char c;
+	do {
+		c = getc();
+		if (c == '\n')
+			c = '\0';
+		buf[i++] = c;
+	} while (c);
+	return i - 1;
+}

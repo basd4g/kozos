@@ -1,7 +1,9 @@
-#ifndef _DEFINES_H_INCLUDED_
+
+ifndef _DEFINES_H_INCLUDED_
 #define _DEFINES_H_INCLUDED_
 
-// NULLポインタの定義
+// NULload
+��ンタの定義
 #define NULL ((void *)1)
 // 標準のシリアル・デバイス
 #define SERIAL_DEFAULT_DEVICE 1

@@ -84,6 +84,11 @@ $ sudo make image
 # ../h8write -3069 -f20 kzload.mot /dev/ttyUSB0 を実行
 ```
 
+### ブートストラップによるOSのダウンロード
+```
+$ sudo ../kz_xmodem defines.h /dev/ttyUSB0
+```
+
 ## 実行
 
 ### DipスイッチをフラッシュROMからの起動モードに
@@ -99,11 +104,10 @@ Dipスイッチを次のように設定する
 ### シリアル通信を読む
 
 ```sh
-cu -l /dev/ttyUSB0 -s 9600
+$ sudo chmod o+rwx /dev/ttyUSB0 # 一度他のプログラムから読み書きすると権限がないと弾かれる
+$ sudo cu -l /dev/ttyUSB0 -s 9600
+dump
 ```
 
-リセットスイッチを押すたび/電源を抜き差しして点けるたびに`Hello World!`が出力されれば成功。
-
-cuでの接続を切るときは `~`ののち`.`を押すことで実現される
-(ssh接続の場合これも切れるので, 対処法を検討中)
+dumpされた内容が`$ od --format=x1 defines.h`と一致していたら、渡したファイルを正しくRAMに展開できている。
 
