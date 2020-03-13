@@ -34,7 +34,7 @@ ON-ON-OFF-ON
 
 #### 2. Connect H8 3069F with host PC
 
-#### 3. Define device path
+#### 3. Define device path on [Makefile](https://github.com/basd4g/kozos/blob/master/bootload/Makefile)
 
 If h8 3069f is connected as `/dev/ttyUSB0`,
 
