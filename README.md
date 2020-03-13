@@ -26,15 +26,15 @@ make
 
 ### Write boot loader
 
-1. Set dip switch
+#### 1. Set dip switch
 
 ON-ON-OFF-ON
 
 (Writing EEPROM mode)
 
-2. Connect H8 3069F with host PC
+#### 2. Connect H8 3069F with host PC
 
-3. Define device path
+#### 3. Define device path
 
 If h8 3069f is connected as `/dev/ttyUSB0`,
 
@@ -42,7 +42,7 @@ If h8 3069f is connected as `/dev/ttyUSB0`,
 H8WRITE_SERDEV = /dev/ttyUSB0
 ```
 
-4. Build & Write
+#### 4. Build & Write
 
 ```sh
 # Build
@@ -55,26 +55,26 @@ $ sudo make image
 
 ### Boot from boot loader
 
-5. Set dip switch
+#### 5. Set dip switch
 
 ON-OFF-ON-OFF
 
 (Boot from EEPROM mode)
 
-6. Reboot
+#### 6. Reboot
 
 Push reset switch.
 
 H8 3069F boot from boot loader in EEPROM.
 
-7. send OS
+#### 7. send OS
 
 ```sh
 $ sudo chmod o+rwx /dev/ttyUSB0
 $ sudo make send
 ```
 
-8. check sended data
+#### 8. check sended data
 
 ```
 $ sudo chmod o+rwx /dev/ttyUSB0
