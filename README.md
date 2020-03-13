@@ -1,115 +1,86 @@
 # kozos for H8 3069F
 
-## 参考書籍
+kozos is Operating system to run on H8 3069F
 
-- [12ステップで作る組み込みOS自作入門](http://kozos.jp/books/makeos/)
+reference: [12ステップで作る組み込みOS自作入門](http://kozos.jp/books/makeos/)
 
-## 環境
+## Documents
 
-OS: Ubuntu 18.04.3 LTS (Bionic Beaver)
+[Click here for documents](doc/README.md)
 
-## 環境構築
-
-次のものをコンパイル(/インストール)する
-
-- binutils 2.19.1 (クロスコンパイル用ツール(アセンブラ,リンカ等))
-- gcc 3.4.6 (クロスコンパイラ)
-- h8write (H8 3069FのフラッシュROMへの書き込みツール)
-- kz_xmodem (xmodemプロトコルによるboot loader向けOS転送ツール)
+## Setup
 
 ```sh
+# ubuntu 18.04
 git clone https://github.com/basd4g/kozos.git
 cd kozos
 
 sudo apt update
-sudo apt install gcc cd lrzsz
+sudo apt install gcc cu lrzsz
 make
-# 各ツールをInstallする
-# ./h8write が生成 またbinutilsとgccが /usr/local/bin/ 以下にインストールされる
 ```
 
-環境構築の詳細(`Makefile`の実行内容)は[tool/README.md](tool/README.md)に記載した
+[Click here for details](doc/setup.md)
 
-## ソースコード
+## Run
 
-- `bootload/Makefile` ... makeファイル
-- `bootload/defines.h` ... ヘッダファイルで使われる内容を含む共通のヘッダファイル
-- `bootload/ld.scr` ... リンカ・スクリプト(実行形式のメモリ配置を定義)
-- `bootload/lib.c` ... 各種ライブラル関数
-- `bootload/lib.h` ... `bootload/lib.c`のヘッダファイル
-- `bootload/main.c` ... main関数を含む
-- `bootload/serial.c` ... シリアルデバイスドライバ
-- `bootload/serial.h` ... `bootload/serial.c`のヘッダファイル
-- `bootload/startup.s` ... スタートアップ
-- `bootload/vector.c`... 割り込みベクタの設定
+### Write boot loader
 
-## 書き込み
+1. Set dip switch
 
-### Dipスイッチを書き込みモードに
+ON-ON-OFF-ON
 
-Dipスイッチを次のように設定する この設定はCPUをフラッシュROM書き込みモードで動作させる
+(Writing EEPROM mode)
 
-1. ON
-1. ON
-1. OFF
-1. ON
+2. Connect H8 3069F with host PC
 
-### 結線
+3. Define device path
 
-H8 3069F評価ボードを電源に接続し、シリアルポートをPCに接続する
-
-### デバイスファイルを指定
-
-`bootload/Makefile`の中身を接続するデバイスに合わせて書き換える
+If h8 3069f is connected as `/dev/ttyUSB0`,
 
 ```bootload/Makefile
 H8WRITE_SERDEV = /dev/ttyUSB0
 ```
 
-この行をH8 3069Fがつながるシリアルポートのデバイスファイルを指すように書き換える
+4. Build & Write
 
-linuxにUSBシリアル変換ケーブルを介して接続するシリアルポートのデバイスファイルは`/dev/ttyUSB0`となるようだ
-
-### ビルド
-
-次にソースコードをビルドする
 ```sh
+# Build
 $ cd bootload
 $ make
-```
 
-### 書き込み
-
-```
+# Write
 $ sudo make image
-# モトローラSレコードフォーマットに変換 kozload.motが生成
-# ../tool/h8write -3069 -f20 kzload.mot /dev/ttyUSB0 を実行
 ```
 
+### Boot from boot loader
 
-## 実行
+5. Set dip switch
 
-### DipスイッチをフラッシュROMからの起動モードに
+ON-OFF-ON-OFF
 
-Dipスイッチを次のように設定する
-この設定はCPUをフラッシュROMから読み込み起動するモードで動作させる
+(Boot from EEPROM mode)
 
-1. ON
-1. OFF
-1. ON
-1. OFF
+6. Reboot
 
-### ブートストラップによるOSのダウンロード
+Push reset switch.
+
+H8 3069F boot from boot loader in EEPROM.
+
+7. send OS
+
 ```sh
+$ sudo chmod o+rwx /dev/ttyUSB0
 $ sudo make send
 ```
 
-### 転送内容の確認
+8. check sended data
+
 ```
-$ sudo chmod o+rwx /dev/ttyUSB0 # 一度他のプログラムから読み書きすると権限がないと弾かれる
+$ sudo chmod o+rwx /dev/ttyUSB0
 $ sudo cu -l /dev/ttyUSB0 -s 9600
 dump
-```
 
-dumpされた内容が`$ od --format=x1 defines.h`と一致していたら、渡したファイルを正しくRAMに展開できている。
+$ od --format=x1 defines.h
+```
 
