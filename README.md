@@ -1,6 +1,6 @@
 # kozos for H8 3069F
 
-## 参考
+## 参考書籍
 
 - [12ステップで作る組み込みOS自作入門](http://kozos.jp/books/makeos/)
 
@@ -15,18 +15,20 @@ OS: Ubuntu 18.04.3 LTS (Bionic Beaver)
 - binutils 2.19.1 (クロスコンパイル用ツール(アセンブラ,リンカ等))
 - gcc 3.4.6 (クロスコンパイラ)
 - h8write (H8 3069FのフラッシュROMへの書き込みツール)
+- kz_xmodem (xmodemプロトコルによるboot loader向けOS転送ツール)
 
 ```sh
 git clone https://github.com/basd4g/kozos.git
 cd kozos
 
-sudo chmod 700 setup.sh
-sudo ./setup.sh
-# 各ツールをDownload,Installする
+sudo apt update
+sudo apt install gcc cd lrzsz
+make
+# 各ツールをInstallする
 # ./h8write が生成 またbinutilsとgccが /usr/local/bin/ 以下にインストールされる
 ```
 
-環境構築の詳細(`setup.sh`の内容)は[setup.md](setup/README.md)に記載した
+環境構築の詳細(`Makefile`の実行内容)は[tool/README.md](tool/README.md)に記載した
 
 ## ソースコード
 
@@ -81,13 +83,9 @@ $ make
 ```
 $ sudo make image
 # モトローラSレコードフォーマットに変換 kozload.motが生成
-# ../h8write -3069 -f20 kzload.mot /dev/ttyUSB0 を実行
+# ../tool/h8write -3069 -f20 kzload.mot /dev/ttyUSB0 を実行
 ```
 
-### ブートストラップによるOSのダウンロード
-```
-$ sudo ../kz_xmodem defines.h /dev/ttyUSB0
-```
 
 ## 実行
 
@@ -101,9 +99,13 @@ Dipスイッチを次のように設定する
 1. ON
 1. OFF
 
-### シリアル通信を読む
-
+### ブートストラップによるOSのダウンロード
 ```sh
+$ sudo make send
+```
+
+### 転送内容の確認
+```
 $ sudo chmod o+rwx /dev/ttyUSB0 # 一度他のプログラムから読み書きすると権限がないと弾かれる
 $ sudo cu -l /dev/ttyUSB0 -s 9600
 dump

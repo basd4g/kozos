@@ -14,7 +14,13 @@ RANLIB	= $(BINDIR)/$(ADDNAME)ranlib
 STRIP	= $(BINDIR)/$(ADDNAME)strip
 
 # フラッシュROM書き込みツール
-H8WRITE = ../h8write
+H8WRITE = ../tool/h8write
+
+# OS転送ツール
+KZ_XMODEM = ../tool/kz_xmodem
+
+# OS
+KOZ_OS = defines.h
 
 # シリアル接続先のデバイスファイル
 H8WRITE_SERDEV = /dev/ttyUSB0
@@ -66,9 +72,12 @@ $(TARGET):	$(OBJS)
 $(TARGET).mot :	$(TARGET)
 		$(OBJCOPY) -O srec $(TARGET) $(TARGET).mot
 
-image :		$(TARGET).mot
 # フラッシュROMへの転送
+image :		$(TARGET).mot
 		$(H8WRITE) -3069 -f20 $(TARGET).mot $(H8WRITE_SERDEV)
+
+# OS本体のブートローダへの転送
+send :		$(KZ_XMODEM) $(KOZ_OS) $(H8WRITE_SERDEV)
 
 # フォルダの掃除
 clean :
